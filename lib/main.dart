@@ -3,10 +3,12 @@ import 'package:provider/provider.dart';
 import 'viewmodels/task_view_model.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -14,19 +16,21 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'MVVM Todo App',
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: TaskListScreen(),
+        home: const TaskListScreen(),
       ),
     );
   }
 }
 
 class TaskListScreen extends StatelessWidget {
+  const TaskListScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final taskViewModel = Provider.of<TaskViewModel>(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Task List')),
+      appBar: AppBar(title: const Text('Task List')),
       body: ListView.builder(
         itemCount: taskViewModel.tasks.length,
         itemBuilder: (context, index) {
@@ -40,7 +44,7 @@ class TaskListScreen extends StatelessWidget {
               },
             ),
             trailing: IconButton(
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               onPressed: () {
                 taskViewModel.deleteTask(task.id);
               },
@@ -52,35 +56,35 @@ class TaskListScreen extends StatelessWidget {
         onPressed: () {
           _showAddTaskDialog(context, taskViewModel);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
   void _showAddTaskDialog(BuildContext context, TaskViewModel taskViewModel) {
-    TextEditingController _textFieldController = TextEditingController();
+    TextEditingController textFieldController = TextEditingController();
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Add Task'),
+          title: const Text('Add Task'),
           content: TextField(
-            controller: _textFieldController,
-            decoration: InputDecoration(hintText: 'Enter task title'),
+            controller: textFieldController,
+            decoration: const InputDecoration(hintText: 'Enter task title'),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             TextButton(
-              child: Text('Add'),
+              child: const Text('Add'),
               onPressed: () {
-                if (_textFieldController.text.isNotEmpty) {
-                  taskViewModel.addTask(_textFieldController.text);
+                if (textFieldController.text.isNotEmpty) {
+                  taskViewModel.addTask(textFieldController.text);
                   Navigator.pop(context);
                 }
               },
