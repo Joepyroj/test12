@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tugas/viewmodels/task_view_model.dart';
+import 'package:tugas/models/task_model.dart';
 
 void main() {
   group('TaskViewModel', () {
@@ -10,28 +11,69 @@ void main() {
     });
 
     test('tugas awal harus kosong', () {
-      expect(taskViewModel.tasks, isEmpty);
+      // Arrange
+
+      // Act
+      final tasks = taskViewModel.tasks;
+
+      // Assert
+      expect(tasks, isEmpty);
     });
 
-    test('add task harus bisa menambahkan tugas jika ada masukan', () {
-      taskViewModel.addTask('New Task');
+    test('addTask harus menambahkan tugas', () {
+      // Arrange
+      final String newTaskTitle = 'New Task';
+
+      // Act
+      taskViewModel.addTask(newTaskTitle);
+
+      // Assert
       expect(taskViewModel.tasks.length, 1);
-      expect(taskViewModel.tasks.first.title, 'New Task');
+      expect(taskViewModel.tasks.first.title, newTaskTitle);
       expect(taskViewModel.tasks.first.isCompleted, false);
     });
 
-    test('centang harus keluar jika sudah melakukan tugas', () {
+    test('toggleTaskStatus mengubah task yang sudah selesai', () {
+      // Arrange
       taskViewModel.addTask('New Task');
-      final task = taskViewModel.tasks.first;
-      taskViewModel.toggleTaskStatus(task.id);
+      final int taskId = taskViewModel.tasks.first.id;
+
+      // Act
+      taskViewModel.toggleTaskStatus(taskId);
+
+      // Assert
       expect(taskViewModel.tasks.first.isCompleted, true);
+
+      // Act
+      taskViewModel.toggleTaskStatus(taskId);
+
+      // Assert
+      expect(taskViewModel.tasks.first.isCompleted, false);
     });
 
-    test('tombol delete harus menghapus tugas di list', () {
+    test('deleteTask harus menghapus tugas dari list', () {
+      // Arrange
       taskViewModel.addTask('New Task');
-      final task = taskViewModel.tasks.first;
-      taskViewModel.deleteTask(task.id);
+      final int taskId = taskViewModel.tasks.first.id;
+
+      // Act
+      taskViewModel.deleteTask(taskId);
+
+      // Assert
       expect(taskViewModel.tasks, isEmpty);
+    });
+
+    test('addTask harus menambah tugas sesuai urutas', () {
+      // Arrange
+      final String newTaskTitle = 'Task with Date';
+
+      // Act
+      taskViewModel.addTask(newTaskTitle);
+      final task = taskViewModel.tasks.first;
+
+      // Assert
+      expect(task.title, newTaskTitle);
+
     });
   });
 }
